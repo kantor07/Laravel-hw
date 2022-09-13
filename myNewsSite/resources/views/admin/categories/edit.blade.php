@@ -3,6 +3,8 @@
 <br>
     <div class="offset-2 col-8">
         <h2>Редактировать категорию</h2>
+        
+        @include('inc.message')
         <form method="post" action="{{ route('admin.categories.update', ['category' => $category]) }}">
             @csrf
             @method('put')

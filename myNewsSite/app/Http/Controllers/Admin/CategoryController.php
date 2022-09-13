@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Categories\CreateRequest;
+use App\Http\Requests\Categories\EditeRequest;
 use App\Models\Category;
 use App\Models\News;
-
-use App\Http\Controllers\Controller;
 use App\Queries\CategoryQueryBuilder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+
 
 class CategoryController extends Controller
 {
@@ -18,8 +21,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(CategoryQueryBuilder $builder)
-    {
-        $categories = Category::all();     
+    {  
         return view('admin.categories.index', [
             'categories' => $builder->getCategory()
         ]);
@@ -28,7 +30,7 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -38,34 +40,31 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  CreateRequest  $request
+     * @return RedirectResponse
      */
     public function store(
-        Request $request,
+        CreateRequest $request,
         CategoryQueryBuilder $builder
-        )
+        ): RedirectResponse
     {
-        $request->validate([
-            'title'=>['required', 'string','min:5', 'max:255']
-        ]);
 
         $category = $builder->create(
-            $request->only(['title', 'description'])
+            $request->validated()
         );
 
-        if($category) {
+        if($category->save()) {
             return redirect()->route('admin.categories.index')
-            ->with('success', 'Запись успешно добавлена');
+            ->with('success', __('messages.admin.categories.create.success'));
         }
-        return back()->with('error', 'Не удалось добавить запись');
+        return back()->with('error', __('messages.admin.categories.create.fail'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -76,7 +75,7 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Category $category)
     {
@@ -88,21 +87,21 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  EditeRequest  $request
      * @param Category $category
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(
-        Request $request, 
+        EditeRequest $request, 
         Category $category,
         CategoryQueryBuilder $builder
-        )
+        ): RedirectResponse
     {
-        if($builder->update($category, $request->only(['title', 'description']))){
+        if($builder->update($category, $request->validated())){
             return redirect()->route('admin.categories.index')
-            ->with('success', 'Запись успешно обновлена');
+            ->with('success', __('messages.admin.categories.update.success'));
         }
-        return back()->with('error', 'Не удалось обновить запись');
+        return back()->with('error', __('messages.admin.categories.update.fail'));
     }
     
 
@@ -110,13 +109,13 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Category $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Category $category)
     {
        
         $category->delete();
            return redirect()->route('admin.categories.index')
-            ->with('success', 'Запись успешно удалена');
+            ->with('success', __('messages.admin.categories.destroy.success'));
     }
 }

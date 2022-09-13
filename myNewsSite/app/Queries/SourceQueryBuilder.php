@@ -16,13 +16,13 @@ final class SourceQueryBuilder
         $this->model = Source::query();
     }
 
-    public function getSource(): Collection|LengthAwarePaginator
+    public function getSource(): LengthAwarePaginator
     {
         return $this->model
             ->paginate(config('pagination.admin.sources'));
     }
 
-    public function create(array $data): Category|bool
+    public function create(array $data): Source|bool
     {
         return Source::create($data);
     }

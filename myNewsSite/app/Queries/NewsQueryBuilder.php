@@ -16,7 +16,7 @@ final class NewsQueryBuilder
         $this->model = News::query();
     }
 
-    public function getNews(): Collection|LengthAwarePaginator
+    public function getNews(): LengthAwarePaginator
     {
         return $this->model
             ->with('category')

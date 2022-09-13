@@ -16,7 +16,7 @@ final class CategoryQueryBuilder
         $this->model = Category::query();
     }
 
-    public function getCategory(): Collection|LengthAwarePaginator
+    public function getCategory(): LengthAwarePaginator
     {
         return $this->model
             ->paginate(config('pagination.admin.categories'));

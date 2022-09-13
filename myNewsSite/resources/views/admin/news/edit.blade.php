@@ -4,12 +4,7 @@
         <br>
         <h2>Редактировать новость</h2>
 
-        @if($errors->any())
-            @foreach($errors->all() as $error)
-                @include('inc.message', ['message'=>$error])
-            @endforeach
-        @endif
-
+        @include('inc.message')
         <form method="post" action="{{ route('admin.news.update', ['news'=> $news]) }}">
             @csrf
             @method('put')
@@ -22,15 +17,15 @@
                         {{ $category->title }}</option>
                     @endforeach
                 </select>       
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="title">Заголовок</label>
                 <input type="text" class="form-control" name="title" id="title" value="{{ $news->title }}">
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="author">Автор</label>
                 <input type="text" class="form-control" name="author" id="author" value="{{ $news->author }}">
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="status">Статус</label>
                 <select class="form-control" name="status">
@@ -38,11 +33,11 @@
                     <option @if($news->status === 'DRAFT') selected @endif>DRAFT</option>
                     <option @if($news->status === 'BLOCKED') selected @endif>BLOCKED</option>
                 </select>
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="image">Изображение</label>
                 <input type="file" class="form-control" name="image" id="image">
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="source_id">Выбрать источник</label>
                 <select class="form-control" name="source_id" id="source_id">
@@ -51,7 +46,7 @@
                     <option value="{{ $source->id }}" @if(old('source_id') === $source->id) selected @endif>{{ $source->title }}</option>
                     @endforeach
                 </select>       
-            </div>
+            </div><br>
             <div class="form-group">
                 <lable for="description">Описание</lable>
                 <textarea class="form-control" name="description" id="description">{!! $news->description !!}</textarea>

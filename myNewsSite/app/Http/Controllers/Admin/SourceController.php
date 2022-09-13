@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Sources\CreateRequest;
+use App\Http\Requests\Sources\EditeRequest;
 use App\Models\Source;
 use App\Queries\SourceQueryBuilder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+
 
 class SourceController extends Controller
 {
@@ -17,7 +21,6 @@ class SourceController extends Controller
      */
     public function index(SourceQueryBuilder $builder)
     {
-        $sources = Source::all();     
         return view('admin.sources.index', [
             'sources' => $builder->getSource()  
         ]);
@@ -36,23 +39,23 @@ class SourceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateRequest  $request
+     * @return RedirectResponse
      */
     public function store(
-        Request $request, 
+        CreateRequest $request, 
         SourceQueryBuilder $builder
-        )
+        ): RedirectResponse
     {
         $source = $builder->create(
-            $request->only(['title', 'url'])
+            $request->validated()
         );
 
         if($source) {
             return redirect()->route('admin.sources.index')
-            ->with('success', 'Запись успешно добавлена');
+            ->with('success', __('messages.admin.sources.create.success'));
         }
-        return back()->with('error', 'Не удалось добавить запись');
+        return back()->with('error', __('messages.admin.sources.create.fail'));
     }
 
     /**
@@ -82,21 +85,20 @@ class SourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param Source $source
-     * @return \Illuminate\Http\Response
+     * @param EditeRequest  $request
+     * @param SourceQueryBuilder $builder
+     * @return RedirectResponse
      */
     public function update(
-        Request $request, 
-        Source $source,
+        EditeRequest $request, 
         SourceQueryBuilder $builder
-        )
+        ): RedirectResponse
     {        
-        if($builder->update($source, $request->only(['title', 'url']))){
+        if($builder->update($source, $request->validated())){
         return redirect()->route('admin.sources.index')
-            ->with('success', 'Запись успешно обновлена');
+            ->with('success', __('messages.admin.sources.update.success'));
         }
-        return back()->with('error', 'Не удалось обновить запись');
+        return back()->with('error', __('messages.admin.sources.update.fail'));
       }
     
 
@@ -110,6 +112,6 @@ class SourceController extends Controller
     {
         $source->delete();
         return redirect()->route('admin.sources.index')
-         ->with('success', 'Запись успешно удалена');
+         ->with('success', __('messages.admin.sources.destroy.success'));
     }
 }

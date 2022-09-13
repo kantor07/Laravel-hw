@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\News;
-use App\Models\Category;
-use App\Models\Source;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\News\CreateRequest;
+use App\Http\Requests\News\EditeRequest;
+use App\Models\Category;
+use App\Models\News;
+use App\Models\Source;
 use App\Queries\NewsQueryBuilder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
 
 class NewsController extends Controller
 {
@@ -41,25 +47,24 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param \App\Queries\NewsQueryBuilder $builder
-     * @return \Illuminate\Http\Response
+     * @param  CreateRequest  $request
+     * @param NewsQueryBuilder $builder
+     * @return RedirectResponse
      */
     public function store(
-        Request $request,
+        CreateRequest $request,
         NewsQueryBuilder $builder
-        )
+        ): RedirectResponse
     {
         $news = $builder->create(
-            $request->only(['category_id',
-             'title', 'author', 'status', 'image', 'source_id', 'description'])
+            $request->validated()
         );
 
         if($news) {
             return redirect()->route('admin.news.index')
-            ->with('success', 'Запись успешно обновлена');
+            ->with('success', __('messages.admin.news.create.success'));
         }
-        return back()->with('error', 'Не удалось обновить запись');
+        return back()->with('error', __('messages.admin.news.create.file'));
     }
 
     /**
@@ -93,34 +98,43 @@ class NewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  EditeRequest  $request
      * @param  News $news
-     * @param App\Queries\NewsQueryBuilder $builder
+     * @param NewsQueryBuilder $builder
      * @return RedirectResponse
      */
     public function update(
-        Request $request,
+        EditeRequest $request,
         News $news,
         NewsQueryBuilder $builder
-        ) {
-            if($builder->update($news, $request->only(['category_id',
-                'source_id', 'title', 'author', 'status', 'image', 'description']))){
-                return redirect()->route('admin.news.index')
-                    ->with('success', 'Запись успешно обновлена');
-                }
-                return back()->with('error', 'Не удалось обновить запись');
-              }
+        ): RedirectResponse
+    {
+        if($builder->update($news, $request->validated())){
+            return redirect()->route('admin.news.index')
+                ->with('success', __('messages.admin.news.update.success'));
+            }
+            return back()->with('error', __('messages.admin.news.update.file'));
+    }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  News $news
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy(News $news)
+    public function destroy(News $news): JsonResponse
     {
-        $news->delete();
-        return redirect()->route('admin.news.index')
-         ->with('success', 'Запись успешно удалена');
+        try {
+            $deleted = $news->delete();
+            if($deleted === false) {
+                return \response()->json('error', 400);
+            }
+
+            return \response()->json('ok');
+
+        } catch(\Exception $e) {
+            \Log::error($e->getMessage());
+            return \response()->json('error', 400);
+        }
     }
 }
