@@ -25,7 +25,16 @@ class EditeRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'min:3', 'max:200'],
-            'url'   => ['required', 'url', 'min:30', 'max:100']
+            'url'   => ['required', 'url', 'min:10', 'max:100']
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'min'   => [
+                'string'    => 'Поле :attribute должно быть не меньше :min.',
+            ]
         ];
     }
 }

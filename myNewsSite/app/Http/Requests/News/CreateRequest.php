@@ -33,4 +33,22 @@ class CreateRequest extends FormRequest
             'description'   => ['nullable', 'string'],
         ];
     }
+    
+    public function attributes(): array
+    {
+        return [
+            'category_id'   => 'Категория новости',
+            'author'        => 'Автор',
+            'source_id'     => 'Источник новости'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'min'   => [
+                'string'    => 'Поле :attribute должно быть не меньше :min.',
+            ]
+        ];
+    }
 }

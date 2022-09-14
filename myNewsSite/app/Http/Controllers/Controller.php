@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Faker\Factory;
-use App\Models\News;
+use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -20,7 +20,7 @@ class Controller extends BaseController
     //     return view('admin.news.index', [
     //         'news' => $news
     //     ]);
-        
+
     //    // $news = [];
     //    // $faker = Factory::create();
 
@@ -33,7 +33,7 @@ class Controller extends BaseController
     //     //         'created_at'    =>now('Europe/Moscow')
     //     //     ];
     //     // }
-        
+
     //     // for($i=1; $i<10; $i++) {
     //     //     $news[$i] = [
     //     //         'title'         => $faker->jobTitle(),
@@ -49,8 +49,8 @@ class Controller extends BaseController
 
     // public function getCategoryNews(int $id = null): array
     // {
-        
-    //     $categoriesNews = app(Category::class)->getCategories();     
+
+    //     $categoriesNews = app(Category::class)->getCategories();
     //     return view('admin.categories.index', [
     //         'categories' => $categories
     //     ]);
@@ -63,7 +63,7 @@ class Controller extends BaseController
     //     //         'title' => $faker->jobTitle()
     //     //     ];
     //     // }
-        
+
     //     // for($i=1; $i<10; $i++) {
     //     //     $categoryNews[$i] = [
     //     //         'title' => $faker->jobTitle()

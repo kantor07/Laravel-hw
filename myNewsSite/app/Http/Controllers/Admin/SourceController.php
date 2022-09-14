@@ -10,7 +10,8 @@ use App\Queries\SourceQueryBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class SourceController extends Controller
 {
@@ -87,10 +88,12 @@ class SourceController extends Controller
      *
      * @param EditeRequest  $request
      * @param SourceQueryBuilder $builder
+     * @param  Source $source
      * @return RedirectResponse
      */
     public function update(
         EditeRequest $request, 
+        Source $source, 
         SourceQueryBuilder $builder
         ): RedirectResponse
     {        
@@ -106,12 +109,20 @@ class SourceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Source $source
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy(Source $source)
+    public function destroy(Source $source): JsonResponse
     {
-        $source->delete();
-        return redirect()->route('admin.sources.index')
-         ->with('success', __('messages.admin.sources.destroy.success'));
+        try {
+            if (!$source->delete()) {
+                return response()->json('error', 400);
+            }
+
+            return response()->json('ok');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json('error', 400);
+        }
     }
 }

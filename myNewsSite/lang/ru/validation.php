@@ -134,7 +134,7 @@ return [
         ],
     ],
 
-    'attrebutes' => [
+    'attributes' => [
         'title' => 'заголовок'
     ],
 ];

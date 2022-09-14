@@ -28,4 +28,13 @@ class EditeRequest extends FormRequest
             'description'   => ['nullable', 'string']
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'min'   => [
+                'string'    => 'Поле :attribute должно быть не меньше :min.',
+            ]
+        ];
+    }
 }

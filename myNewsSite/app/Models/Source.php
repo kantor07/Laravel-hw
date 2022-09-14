@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\News;
+use App\Models\Article;
 
 
 class Source extends Model
@@ -29,6 +30,6 @@ class Source extends Model
 
     public function news(): HasMany
     {
-        return $this->hasMany(News::class, 'source_id', 'id');
+        return $this->hasMany(Article::class, 'source_id', 'id');
     }
 }

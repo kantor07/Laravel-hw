@@ -27,11 +27,7 @@
               <td>{{ $category->created_at->format('d-m-Y H:i') }}</td>
               <td>
                 <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}" class="btn btn-linkt btn-sm">Ред.</a> 
-                <form method="post" action="{{ route('admin.categories.destroy', ['category' => $category]) }}">
-                  @csrf
-                  @method('delete')
-                  <button type="submit" class="btn btn-linkt btn-sm" style="color: red;" >Уд.</button> 
-                </form>
+                <a class="delete text-red btn btn-linkt btn-sm" style="color: red" data-id="{{ $category->id }}">Уд.</a>
               </td>
             </tr>
             @empty
@@ -43,4 +39,41 @@
         </table>
         {{ $categories->links() }}
       </div>
-@endsection    
+@endsection   
+@push('js')
+  <script type="text/javascript">
+    let id
+    $('.delete').click(function(e) {
+      e.preventDefault()
+
+      id = $(this).attr('data-id')
+      
+      $.ajax({
+        url: `/admin/categories/${id}`,
+        data: {
+          '_token': '{{ csrf_token() }}'
+        },
+        type: 'DELETE',
+        success: function(response) {
+          location.reload()
+        },
+        error: function(response) {
+          alert("Удаление отменено")
+        }
+      })
+    })
+   
+    async function send(url) {
+      let response = await fetch(url, {
+        method:'DELETE',
+        data: {
+            '_token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'id' : id
+        },
+      });
+
+      let result = await response.json();
+      return result.ok;
+    }
+  </script>
+@endpush 

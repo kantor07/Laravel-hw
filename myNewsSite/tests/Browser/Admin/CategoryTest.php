@@ -2,17 +2,14 @@
 
 namespace Tests\Browser\Admin;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\Models\Category;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-
-
-use App\Models\Category;
-use Illuminate\Database\Eloquent\Factories\Factory;
-
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CategoryTest extends DuskTestCase
 {
+    use DatabaseTransactions;
     /**
      * A Dusk test example.
      *
@@ -21,7 +18,7 @@ class CategoryTest extends DuskTestCase
     public function testExample(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/myNewsSite/public/admin/categories')
+            $browser->visit('/admin/categories')
                     ->assertSee('Список категорий');
         });
     }
@@ -31,11 +28,11 @@ class CategoryTest extends DuskTestCase
         $category = Category::factory()->create();
 
         $this->browse(static function (Browser $browser) use ($category) {
-            $browser->visit('myNewsSite/public/admin/categories/create')
+            $browser->visit('/admin/categories/create')
                     ->type('title', $category->title)
                     ->type('description', $category->description)
                     ->press('Сохранить')
-                    ->assertPathIs('myNewsSite/public/admin/categories');
+                    ->assertPathIs('/admin/categories');
         });
     }
 }

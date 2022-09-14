@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
             SourcesSeeder::class,
-            NewsSeeder::class
+            ArticleSeeder::class
         ]);
 
     }

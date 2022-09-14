@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\News;
+use App\Models\Article;
 use App\Models\Category;
 
 class NewsController extends Controller
 {
     public function index()
     {
-        $newsList = app(News::class)->getNews();
+        $newsList = app(Article::class)->getNews();
         return view('admin.news.index', [
             'newsList' => $newsList
         ]);
@@ -19,7 +19,7 @@ class NewsController extends Controller
     public function show(int $id)
     {
         //return current news
-        $news = app(News::class)->getNews($id);
+        $news = app(Article::class)->getNews($id);
         return view('news.show', [
             'news' => $news
         ]);
@@ -27,7 +27,7 @@ class NewsController extends Controller
     public function category()
     {
         //list all category
-        $categoryNews = app(Category::class)->getCategories();     
+        $categoryNews = app(Category::class)->getCategories();
         return view('sitePage.categoryNewsPage', [
             'newsCategoryList' => $categoryNews
         ]);
