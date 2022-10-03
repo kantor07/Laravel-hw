@@ -20,7 +20,8 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param CategoryQueryBuilder $builder
+     * @return Response
      */
     public function index(CategoryQueryBuilder $builder)
     {
@@ -43,6 +44,7 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  CreateRequest  $request
+     * @param CategoryQueryBuilder $builder
      * @return RedirectResponse
      */
     public function store(
@@ -91,6 +93,7 @@ class CategoryController extends Controller
      *
      * @param  EditeRequest  $request
      * @param Category $category
+     * @param CategoryQueryBuilder $builder
      * @return RedirectResponse
      */
     public function update(

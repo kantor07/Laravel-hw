@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.app') 
 @section('title') Главная страница @parent @endsection
 @section('content')
 <div style="width: 1366px; margin: 0 auto; height: 600px;">    

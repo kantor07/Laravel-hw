@@ -4,10 +4,12 @@
     
     <h1>Все новости</h1>
     <br><hr>
-    @foreach($newsCategoryList as $newsCategory)
+    @forelse($categoryList as $newsCategory)
     <br>
         <div>
             <h2><a href="#">{{ $newsCategory->title }}</a></h2>
         </div><br><hr>
     @endforeach
+    <br><br>
+    {{ $categoryList->links() }}
 @endsection 

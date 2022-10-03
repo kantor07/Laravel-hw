@@ -5,7 +5,7 @@
         <h2>Редактировать новость</h2>
 
         <!--@include('inc.message')!-->
-        <form method="post" action="{{ route('admin.articles.update', ['article'=> $article]) }}">
+        <form method="post" action="{{ route('admin.articles.update', ['article'=> $article]) }}" enctype="multipart/form-data">
             @csrf
             @method('put')
             <div class="form-group">
@@ -59,3 +59,13 @@
         </form>
     </div>
 @endsection
+@push('js')
+<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#description' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+@endpush

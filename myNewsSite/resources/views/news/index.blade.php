@@ -3,23 +3,20 @@
 @section('content')
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         
-        @forelse($newsList as $news)
+        @forelse($articlesList as $article)
         <div class="col">
             <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" 
-                    aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title></title>
-                    <rect width="100%" height="100%" fill="#55595c"/>
-                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ $news->title }}</text>
-                </svg>
+                
+                <img src="{{ Storage::disk('public')->url($article->image) }}" style="width: 300px">
 
+            <h2>{{ $article->title }}</h2>
             <div class="card-body">
-                <p class="card-text">{!! $news->description !!}</p>
+                <p class="card-text">{!! $article->description !!}</p>
                 <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                    <a href="#" class="btn btn-sm btn-outline-secondary">Смотреть подробнее</a>
+                    <a href="{{ route('news.show', ['article' => $article]) }}" class="btn btn-sm btn-outline-secondary">Смотреть подробнее</a>
                 </div>
-                <small class="text-muted">{{ $news->author }} - {{ $news->created_at }}</small>
+                <small class="text-muted">{{ $article->author }} - {{ $article->created_at }}</small>
                 </div>
             </div>
             </div>
@@ -27,7 +24,9 @@
 
         @empty
         <h2>Записей нет</h2>    
-        @endforelse
+        @endforelse      
     </div>
+    <br><br>
+    {{ $articlesList->links() }}
 @endsection
 

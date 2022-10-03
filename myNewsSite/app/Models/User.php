@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
 class User extends Authenticatable
 {
@@ -17,12 +18,26 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
+    protected $table = "users";
+
+    public static $selectedFields = [
+        'id',
+        'avatar',
         'name',
         'email',
         'password',
-    ];
+        'is_admin',
+        'created_at'];
 
+    
+     protected $fillable = [
+        'name',
+        'avatar',
+        'email',
+        'password',
+        'is_admin',
+    ];
+    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -40,5 +55,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'bool',
+    ];
+
+    protected $dates = [
+        'last_login_at',
     ];
 }

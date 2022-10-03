@@ -5,7 +5,7 @@
         <h2>Добавить новость</h2>
 
         @include('inc.message')
-        <form method="post" action="{{ route('admin.articles.store') }}">
+        <form method="post" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <lable for="category_id">Выбрать категорию</label>

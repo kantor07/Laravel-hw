@@ -18,7 +18,8 @@ class SourceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param SourceQueryBuilder $builder
+     * @return Response
      */
     public function index(SourceQueryBuilder $builder)
     {
@@ -30,7 +31,7 @@ class SourceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -41,6 +42,7 @@ class SourceController extends Controller
      * Store a newly created resource in storage.
      *
      * @param CreateRequest  $request
+     * @param SourceQueryBuilder $builder
      * @return RedirectResponse
      */
     public function store(
@@ -74,7 +76,7 @@ class SourceController extends Controller
      * Show the form for editing the specified resource.
      *
      *  @param  Source $source
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Source $source)
     {

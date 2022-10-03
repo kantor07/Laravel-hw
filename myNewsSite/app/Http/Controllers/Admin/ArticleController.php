@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Article;
 use App\Models\Source;
 use App\Queries\ArticleQueryBuilder;
+use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -54,18 +55,23 @@ class ArticleController extends Controller
      */
     public function store(
         CreateRequest $request,
-        ArticleQueryBuilder $builder
+        ArticleQueryBuilder $builder,
+        UploadService $uploadService
     ): RedirectResponse
     {
-        $article = $builder->create(
-            $request->validated()
-        );
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $uploadService->uploadImage($request->file('image'));
+         }
+
+        $article = $builder->create($validated);
 
         if ($article) {
             return redirect()->route('admin.articles.index')
-                ->with('success', __('messages.admin.articles.create.success'));
+                ->with('success', __('messages.admin.news.create.success'));
         }
-        return back()->with('error', __('messages.admin.articles.create.file'));
+        return back()->with('error', __('messages.admin.news.create.file'));
     }
 
     /**
@@ -106,27 +112,34 @@ class ArticleController extends Controller
      * @param EditeRequest $request
      * @param Article $article
      * @param ArticleQueryBuilder $builder
-     *
+     * @param UploadService $uploadService
      * @return RedirectResponse
      */
     public function update(
         EditeRequest $request,
         Article $article,
-        ArticleQueryBuilder $builder
+        ArticleQueryBuilder $builder,
+        UploadService $uploadService
     ): RedirectResponse
     {
-        if ($builder->update($article, $request->validated())) {
-            return redirect()->route('admin.articles.index')
-                ->with('success', __('messages.admin.articles.update.success'));
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+           $validated['image'] = $uploadService->uploadImage($request->file('image'));
         }
-        return back()->with('error', __('messages.admin.articles.update.file'));
+
+        if ($builder->update($article, $validated)) {
+            return redirect()->route('admin.articles.index')
+                ->with('success', __('messages.admin.news.update.success'));
+        }
+        return back()->with('error', __('messages.admin.news.update.file'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Article $article
-     * @param Illuminate\Support\Facades\Log;
+     * @param Log;
      * @return JsonResponse
      */
     public function destroy(Article $article): JsonResponse
