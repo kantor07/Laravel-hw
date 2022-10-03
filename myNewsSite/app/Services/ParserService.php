@@ -8,7 +8,7 @@ use App\Services\Contracts\Parser;
 use Orchestra\Parser\Xml\Facade as XmlParser;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Article;
-use App\Models\Source;
+use App\Models\Category;
 
 
 class ParserService implements Parser
@@ -44,7 +44,7 @@ class ParserService implements Parser
 
         $e = explode("/", $this->link);
         $fileName = end($e);
-        $categories = Source::all();
+        $categories = Category::all();
         
         foreach($categories as $category) {
            if($category->title === $fileName) {
